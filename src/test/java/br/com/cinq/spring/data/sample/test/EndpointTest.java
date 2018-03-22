@@ -1,66 +1,41 @@
 package br.com.cinq.spring.data.sample.test;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.TestRestTemplate;
-import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.cinq.spring.data.sample.application.Application;
-//import br.com.cinq.spring.data.sample.entity.City;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.client.RestTemplate;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
-@WebIntegrationTest(randomPort = true)
-@IntegrationTest("server.port=9000")
-@ActiveProfiles("unit")
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = Application.class)
+@AutoConfigureMockMvc
 public class EndpointTest {
-    Logger logger = LoggerFactory.getLogger(EndpointTest.class);
 
-    private final String localhost = "http://localhost:";
 
-    @Value("${local.server.port}")
-    private int port;
+    @Autowired
+    private MockMvc mvc;
 
-    private RestTemplate restTemplate = new TestRestTemplate();
+    private RestTemplate restTemplate = new RestTemplate();
 
     @Test
-    public void testGetCities() throws InterruptedException {
-        String country = "France";
+    public void testGetCities() throws InterruptedException, Exception {
+        String country = "brazil";
 
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
-
-//        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(this.localhost + this.port + "/rest/cities/")
-//                .queryParam("country", country);
-
-//        HttpEntity<?> entity = new HttpEntity<>(headers);
-
-//        ResponseEntity<City[]> response = this.restTemplate.exchange(builder.build().encode().toUri(), HttpMethod.GET,
-//                entity, City[].class);
-
-//        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-
-//        Thread.sleep(2000L);
-
-//        City[] cities = response.getBody();
-
-//        Assert.assertEquals(2, cities.length);
+        mvc.perform(get("/rest/cities?country="+country).contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(4)));
 
     }
 }
