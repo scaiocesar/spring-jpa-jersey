@@ -1,4 +1,4 @@
-# [UPDATE] Problem Solved Version
+#[UPDATE] Problem Solved Version
 
 # Skills in Spring, Data manipulation and JAX RS
 Here you will find a scaffold of a project that aims to expose a REST service to list cities.
