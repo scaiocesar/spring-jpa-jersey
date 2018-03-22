@@ -1,4 +1,5 @@
 # [UPDATE] Problem Solved Version
+
 # Skills in Spring, Data manipulation and JAX RS
 Here you will find a scaffold of a project that aims to expose a REST service to list cities.
 You need to upgrade the project to the newest versions and implement this service using any necessary means.
